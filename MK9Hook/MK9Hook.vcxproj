@@ -162,6 +162,8 @@
     <ClInclude Include="code\mk9.h" />
     <ClInclude Include="code\mk9menu.h" />
     <ClInclude Include="code\mkcamera.h" />
+    <ClInclude Include="eDirectX9Hook.h" />
+    <ClInclude Include="font.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -190,11 +192,13 @@
     <ClCompile Include="code\mk9menu.cpp" />
     <ClCompile Include="code\mkcamera.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="eDirectX9Hook.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx9.cpp" />
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="IniReader.cpp" />
     <ClCompile Include="kiero\kiero.cpp" />

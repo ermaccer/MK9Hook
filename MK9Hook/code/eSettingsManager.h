@@ -32,6 +32,10 @@ public:
 	int iFreeCameraKeyFOVPlus;
 	int iFreeCameraKeyFOVMinus;
 
+	float fMenuScale;
+
+	void SaveSettings();
+
 };
 
 extern eSettingsManager* SettingsMgr;
