@@ -9,6 +9,8 @@ public:
 
 	bool bEnableConsoleWindow;
 
+	bool bEnableGamepadSupport;
+
 	bool bUseGenericVersusImage;
 
 	int iHookMenuOpenKey;

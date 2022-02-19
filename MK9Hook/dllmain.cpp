@@ -7,6 +7,7 @@
 #include "code/eNotifManager.h"
 #include "code/mkcamera.h"
 #include "code/eSettingsManager.h"
+#include "code/eGamepadManager.h"
 #include "eDirectX9Hook.h"
 
 using namespace Memory::VP;
@@ -118,6 +119,11 @@ void OnInitializeHook()
 	InjectHook(0x87E44C, &MKCamera::HookedSetFOV, PATCH_CALL);
 	InjectHook(0x8DB8D1, &MKCamera::HookedSetFOV, PATCH_CALL);
 	InjectHook(0x978303, &MKCamera::HookedSetFOV, PATCH_CALL);
+
+
+	//gamepad
+	if (SettingsMgr->bEnableGamepadSupport)
+		InjectHook(0x99CA36, XInputGetState_Hook, PATCH_JUMP);
 
 }
 

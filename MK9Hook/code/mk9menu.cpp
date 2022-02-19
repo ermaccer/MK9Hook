@@ -19,6 +19,7 @@ const char* szCharacters[] = {
 	"NPC_JC_Director",
 	"NPC_TarkatanSoldierA",
 	"NPC_Zombie_Male",
+	"NPC_FightingDummy_Male",
 	"CHAR_Baraka",
 	"CHAR_Baraka_B",
 	"CHAR_CyberZero",
@@ -441,6 +442,12 @@ void MK9Menu::Draw()
 		{
 			ImGui::Text("Color Filter");
 			ImGui::InputFloat3("R | G | B", &colorFilter.X);
+#ifdef _DEBUG
+			if (ImGui::Button("Print Pointers"))
+			{
+				printf("P1 OBJ: 0x%X INFO: 0x%X\n", GetObj(PLAYER1), GetInfo(PLAYER1));
+			}
+#endif
 			ImGui::EndTabItem();
 		}
 	}

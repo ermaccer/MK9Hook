@@ -7,6 +7,7 @@ void eSettingsManager::Init()
 {
 	CIniReader ini("");
 	bEnableConsoleWindow = ini.ReadBoolean("Settings", "bEnableConsoleWindow", true);
+	bEnableGamepadSupport = ini.ReadBoolean("Settings", "bEnableGamepadSupport", true);
 
 
 	iHookMenuOpenKey = ini.ReadInteger("Settings", "iHookMenuOpenKey", VK_F1);
@@ -49,7 +50,7 @@ void eSettingsManager::SaveSettings()
 	user.WriteFloat("MenuSettings", "fMenuScale", fMenuScale);
 
 	CIniReader ini("");
-	//ini.WriteBoolean("Settings", "bEnableGamepadSupport", bEnableGamepadSupport);
+	ini.WriteBoolean("Settings", "bEnableGamepadSupport", bEnableGamepadSupport);
 	ini.WriteBoolean("Settings", "bEnableConsoleWindow", bEnableConsoleWindow);
 	ini.WriteBoolean("Settings", "bUseGenericVersusImage", bUseGenericVersusImage);
 }

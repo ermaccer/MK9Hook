@@ -1,7 +1,7 @@
 #pragma once
 #define GFG_GAME_INFO  0xE89B70 
 
-#define MK9HOOK_VERSION "0.2"
+#define MK9HOOK_VERSION "0.2.1"
 
 enum  PLAYER_NUM
 {

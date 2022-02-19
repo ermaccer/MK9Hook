@@ -2,6 +2,7 @@
 #include "code/eNotifManager.h"
 #include "code/mk9menu.h"
 #include "code/eSettingsManager.h"
+#include "code/eGamepadManager.h"
 #include "font.h"
 
 EndScene eDirectX9Hook::m_pEndScene;
@@ -91,9 +92,12 @@ void eDirectX9Hook::InitImGui(LPDIRECT3DDEVICE9 pDevice)
 {
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+	ImGui::GetIO().ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 	ImGui_ImplWin32_Init(ms_hWindow);
 	ImGui_ImplDX9_Init(pDevice);
+	if (SettingsMgr->bEnableGamepadSupport)
+		CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(GamepadThread), nullptr, 0, nullptr);
 	SetImGuiStyle();
 }
 
