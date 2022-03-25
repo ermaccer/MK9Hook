@@ -160,6 +160,7 @@
     <ClInclude Include="code\eGamepadManager.h" />
     <ClInclude Include="code\eNotifManager.h" />
     <ClInclude Include="code\eSettingsManager.h" />
+    <ClInclude Include="code\GameInfo.h" />
     <ClInclude Include="code\mk9.h" />
     <ClInclude Include="code\mk9menu.h" />
     <ClInclude Include="code\mkcamera.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="code\eGamepadManager.cpp" />
     <ClCompile Include="code\eNotifManager.cpp" />
     <ClCompile Include="code\eSettingsManager.cpp" />
+    <ClCompile Include="code\GameInfo.cpp" />
     <ClCompile Include="code\mk9.cpp" />
     <ClCompile Include="code\mk9menu.cpp" />
     <ClCompile Include="code\mkcamera.cpp" />

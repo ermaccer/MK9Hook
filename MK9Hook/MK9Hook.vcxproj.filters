@@ -111,6 +111,9 @@
     <ClInclude Include="code\eGamepadManager.h">
       <Filter>Header Files\code</Filter>
     </ClInclude>
+    <ClInclude Include="code\GameInfo.h">
+      <Filter>Header Files\code</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -180,6 +183,9 @@
       <Filter>Header Files\imgui</Filter>
     </ClCompile>
     <ClCompile Include="code\eGamepadManager.cpp">
+      <Filter>Header Files\code</Filter>
+    </ClCompile>
+    <ClCompile Include="code\GameInfo.cpp">
       <Filter>Header Files\code</Filter>
     </ClCompile>
   </ItemGroup>
