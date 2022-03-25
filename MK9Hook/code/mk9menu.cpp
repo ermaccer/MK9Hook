@@ -192,6 +192,12 @@ void MK9Menu::Draw()
 			m_bSubmenuActive[SUBMENU_SETTINGS] = true;
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("Script Reference"))
+				m_bSubmenuActive[SUBMENU_SCRIPT] = true;
+			ImGui::EndMenu();
+		}
 	}
 	ImGui::EndMenuBar();
 
@@ -221,7 +227,6 @@ void MK9Menu::Draw()
 		{
 			DrawCameraTab();
 			ImGui::EndTabItem();
-
 		}
 		if (ImGui::BeginTabItem("Cheats"))
 		{
@@ -244,6 +249,9 @@ void MK9Menu::Draw()
 
 	if (m_bSubmenuActive[SUBMENU_SETTINGS])
 		DrawSettings();
+
+	if (m_bSubmenuActive[SUBMENU_SCRIPT])
+		DrawScriptReference();
 }
 
 void MK9Menu::UpdateControls()
@@ -720,6 +728,64 @@ void MK9Menu::DrawSettings()
 		Notifications->PushNotification("Settings saved to MK9Hook.ini and mk9hook_user.ini!");
 		eDirectX9Hook::ms_bShouldReloadFonts = true;
 		SettingsMgr->SaveSettings();
+	}
+
+	ImGui::EndChild();
+
+	ImGui::End();
+}
+
+void MK9Menu::DrawScriptReference()
+{
+	ImGui::SetNextWindowPos({ ImGui::GetIO().DisplaySize.x / 2.0f, ImGui::GetIO().DisplaySize.y / 2.0f }, ImGuiCond_Once, { 0.5f, 0.5f });
+	ImGui::SetNextWindowSize({ 54 * ImGui::GetFontSize(), 54 * ImGui::GetFontSize() }, ImGuiCond_Once);
+	ImGui::Begin("Script Reference", &m_bSubmenuActive[SUBMENU_SCRIPT]);
+
+	static int secID = 0;
+	static const char* scriptSections[] = {
+		"General",
+		"Usage",
+	};
+
+	enum eScriptRef {
+		GEN,
+		USG,
+	};
+
+	ImGui::BeginChild("##settings", { 12 * ImGui::GetFontSize(), 0 }, true);
+
+	for (int n = 0; n < IM_ARRAYSIZE(scriptSections); n++)
+	{
+		bool is_selected = (secID == n);
+		if (ImGui::Selectable(scriptSections[n], is_selected))
+			secID = n;
+		if (is_selected)
+			ImGui::SetItemDefaultFocus();
+	}
+
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+	ImGui::BeginChild("##content", { 0, -ImGui::GetFrameHeightWithSpacing() });
+
+	switch (secID)
+	{
+	case GEN:
+		ImGui::TextWrapped("MK9 stores most of important game functions inside Startup.xxx archive, extract it and look for FightingArt .mko (MKScriptBinary) files."
+		"\n\nSpecify the archive source and then specify script name. eg.\n"
+		"Script Source: FightingArt Script Name: FGFightEngineScript.mko\n"
+		"Press Load to be able to call functions.\n");
+		break;
+	case USG:
+		ImGui::BulletText("On Player1 - selected function will execute on Player 1 object.\nUse with character scripts or FightingArt scripts.");
+		ImGui::BulletText("On Player2 - selected function will execute on Player 2 object.\nUse with character scripts or FightingArt scripts.");
+
+		ImGui::TextWrapped("example FGFightEngineScript functions:");
+		ImGui::BulletText("p_roundover_winner_walk_away");
+		ImGui::BulletText("p_roundover_winner_taunt");
+		break;
+	default:
+		break;
 	}
 
 	ImGui::EndChild();

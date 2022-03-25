@@ -10,6 +10,7 @@ enum eCustomCameras {
 
 enum eMenuSubMenus {
 	SUBMENU_SETTINGS,
+	SUBMENU_SCRIPT,
 	TOTAL_SUBMENUS
 };
 
@@ -102,6 +103,7 @@ public:
 	void DrawMiscTab();
 
 	void DrawSettings();
+	void DrawScriptReference();
 
 	void DrawKeyBind(char* name, int* var);
 	void KeyBind(int* var, char* bindName, char* name);
