@@ -37,7 +37,7 @@ public:
 	float fMenuScale;
 
 	void SaveSettings();
-
+	void ResetKeys();
 };
 
 extern eSettingsManager* SettingsMgr;

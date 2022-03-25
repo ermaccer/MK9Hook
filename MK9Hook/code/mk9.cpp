@@ -52,6 +52,11 @@ void SetCharacterSpeed(PLAYER_NUM plr, float speed)
 	*(float*)(obj + 0xF4) = speed;
 }
 
+void RunCharacterScript(PLAYER_NUM plr, MKScript* script, int function)
+{
+	((void(__thiscall*)(int, MKScript*, int))0x45C610)(*(int*)((int)GetObj(plr) + 0x2FA4), script, function);
+}
+
 char * GetCharacterName(PLAYER_NUM plr)
 {
 	int info = GetInfo(plr);

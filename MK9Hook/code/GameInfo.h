@@ -5,4 +5,4 @@ public:
 	int GetFunctionID(char* name);
 };
 
-MKScript* GetScript(const char* name);
+MKScript* GetScript(const char* packageName, const char* name);

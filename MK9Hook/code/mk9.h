@@ -1,7 +1,9 @@
 #pragma once
+#include "GameInfo.h"
+
 #define GFG_GAME_INFO  0xE89B70 
 
-#define MK9HOOK_VERSION "0.2.1"
+#define MK9HOOK_VERSION "0.3"
 
 enum  PLAYER_NUM
 {
@@ -42,6 +44,8 @@ void  SetCharacterLife(PLAYER_NUM plr, float health);
 
 void  SetCharacterScale(PLAYER_NUM plr, FVector* scale);
 void  SetCharacterSpeed(PLAYER_NUM plr, float speed);
+
+void  RunCharacterScript(PLAYER_NUM plr, MKScript* script, int function);
 
 char* GetCharacterName(PLAYER_NUM plr);
 void  GetCharacterPosition(PLAYER_NUM plr, FVector* pos);
