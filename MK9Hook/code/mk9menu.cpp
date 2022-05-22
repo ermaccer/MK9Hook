@@ -603,9 +603,11 @@ void MK9Menu::DrawScriptTab()
 
 void MK9Menu::DrawMiscTab()
 {
+	ImGui::Checkbox("Disable Combo Scaling", &m_bDisableComboScaling);
+	ImGui::Separator();
 	ImGui::Text("Color Filter");
 	ImGui::InputFloat3("R | G | B", &colorFilter.X);
-#ifdef WIN32
+#ifdef _DEBUG
 	if (ImGui::Button("Print Pointers"))
 	{
 		printf("P1 OBJ: 0x%X INFO: 0x%X\n", GetObj(PLAYER1), GetInfo(PLAYER1));

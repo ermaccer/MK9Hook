@@ -52,6 +52,12 @@ void SetCharacterSpeed(PLAYER_NUM plr, float speed)
 	*(float*)(obj + 0xF4) = speed;
 }
 
+void SetCharacterDamageScale(PLAYER_NUM plr, float value)
+{
+	int info = GetInfo(plr);
+	*(float*)(info + 0x17EC) = value;
+}
+
 void RunCharacterScript(PLAYER_NUM plr, MKScript* script, int function)
 {
 	((void(__thiscall*)(int, MKScript*, int))0x45C610)(*(int*)((int)GetObj(plr) + 0x2FA4), script, function);
@@ -187,6 +193,12 @@ void MK9Hooks::HookProcessStuff()
 			SetCharacterScale(PLAYER1,&TheMenu->m_vP1Scale);
 		if (GetObj(PLAYER2))
 			SetCharacterScale(PLAYER2, &TheMenu->m_vP2Scale);
+	}
+
+	if (TheMenu->m_bDisableComboScaling)
+	{
+		SetCharacterDamageScale(PLAYER1, 1.0f);
+		SetCharacterDamageScale(PLAYER2, 1.0f);
 	}
 
 	if (TheMenu->m_bChangePlayerSpeed)
