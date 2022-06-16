@@ -1,9 +1,12 @@
 #pragma once
 #include "GameInfo.h"
+#include "unreal/FVector.h"
+#include "unreal/SkeletalMeshComponent.h"
+#include "unreal/FRotator.h"
 
 #define GFG_GAME_INFO  0xE89B70 
 
-#define MK9HOOK_VERSION "0.3.1"
+#define MK9HOOK_VERSION "0.3.2"
 
 enum  PLAYER_NUM
 {
@@ -12,25 +15,9 @@ enum  PLAYER_NUM
 	PLAYER2,
 	PLAYER3,
 	PLAYER4,
-	MAX_PLAYERS,
-	CPU_PLAYER,
-	NOT_CPU_PLAYER,
-	BACKGROUND_PLAYER
+	MAX_PLAYERS
 };
 
-struct FVector
-{
-	float X;
-	float Y;
-	float Z;
-};
-
-
-struct FRotator {
-	int Pitch;
-	int Yaw;
-	int Roll;
-};
 
 
 int	  GetInfo(PLAYER_NUM plr);
@@ -51,6 +38,9 @@ void  RunCharacterScript(PLAYER_NUM plr, MKScript* script, int function);
 
 char* GetCharacterName(PLAYER_NUM plr);
 void  GetCharacterPosition(PLAYER_NUM plr, FVector* pos);
+
+
+USkeletalMeshComponent* GetSkeleton(PLAYER_NUM plr);
 
 void  SetGameSpeed(float speed);
 

@@ -1,16 +1,19 @@
 #include "mk9.h"
 #include "GameInfo.h"
 #include "helper/eKeyboardMan.h"
+#include "unreal/FVector.h"
 #include <vector>
 
 enum eCustomCameras {
 	CAMERA_3RDPERSON,
+	CAMERA_HEAD_TRACKING,
 	TOTAL_CUSTOM_CAMERAS
 };
 
 enum eMenuSubMenus {
 	SUBMENU_SETTINGS,
 	SUBMENU_SCRIPT,
+	SUBMENU_CAMERA_DEBUG,
 	TOTAL_SUBMENUS
 };
 
@@ -34,14 +37,21 @@ public:
 	bool	 m_bSubmenuActive[TOTAL_SUBMENUS] = {};
 	bool     m_bPressingKey = false;
 	bool	 m_bSlowMotion = false;
-	bool	 m_bIsFocused = false;
+	bool	 m_bIsFocused = true;
 	bool	 m_bCustomCameraPos = false;
 	bool	 m_bCustomCameraFOV = false;
 	bool	 m_bCustomCameraRot = false;
 	bool	 m_bFreeCam = false;
 	bool	 m_bCustomCameras = false;
 	bool	 m_bYObtained = false;
-	bool	 m_bStageModifier;
+	bool	 m_bStageModifier = false;
+	bool	 m_bDontFlipCamera = false;
+	bool	 m_bUsePlayerTwoAsTracker = false;
+	bool	 m_bStaticHead = false;
+	bool	 m_bDontAdjust = false;
+	bool	 m_bMouseControl = false;
+	bool	 m_bHideHUD = false;
+	bool     m_bForceCameraUpdate = false;
 	// cheats
 	bool m_bInfiniteHealthP1 = false;
 	bool m_bInfiniteMeterP1 = false;
@@ -62,6 +72,11 @@ public:
 	float	 m_fFreeCameraSpeed = 5.25f;
 	float	 m_fP1Speed = 1.0f;
 	float	 m_fP2Speed = 1.0f;
+	float	 m_fAdjustCustomHeadCameraX = 0.0f;
+	float	 m_fAdjustCustomHeadCameraY = -2800.0f;
+	float	 m_fAdjustCustomHeadCameraZ = 0.0f;
+	float	 m_fAdjustCustomHeadCameraY2 = 0.0f;
+
 
 	int  m_nFreeCameraRotationSpeed = 120;
 	int  m_nCurrentCustomCamera = CAMERA_3RDPERSON;
@@ -106,6 +121,7 @@ public:
 
 	void DrawSettings();
 	void DrawScriptReference();
+	void DrawCamDebug();
 
 	void DrawKeyBind(char* name, int* var);
 	void KeyBind(int* var, char* bindName, char* name);
@@ -118,5 +134,7 @@ public:
 
 
 extern MK9Menu* TheMenu;
+
+void ToggleHUD();
 
 char* GetMK9HookVersion();

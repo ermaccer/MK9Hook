@@ -3,6 +3,13 @@
 
 // as usual, pluginmh/mugenhook
 
+struct eMouseSettings {
+	int sens;
+	bool invert_y;
+	bool invert_x;
+};
+
+
 class eSettingsManager {
 public:
 	void Init();
@@ -33,6 +40,9 @@ public:
 
 	int iFreeCameraKeyFOVPlus;
 	int iFreeCameraKeyFOVMinus;
+
+
+	eMouseSettings mouse;
 
 	float fMenuScale;
 

@@ -9,6 +9,7 @@
 #include "code/eSettingsManager.h"
 #include "code/eGamepadManager.h"
 #include "eDirectX9Hook.h"
+#include "code/helper/eMouse.h"
 
 using namespace Memory::VP;
 
@@ -18,6 +19,7 @@ void WINAPI HookUpdate()
 	while (true)
 	{
 		MK9Hooks::HookProcessStuff();
+		eMouse::UpdateMouse();
 		Sleep(1);
 	}
 }
@@ -124,7 +126,6 @@ void OnInitializeHook()
 	//gamepad
 	if (SettingsMgr->bEnableGamepadSupport)
 		InjectHook(0x99CA36, XInputGetState_Hook, PATCH_JUMP);
-
 }
 
 bool CheckGame()

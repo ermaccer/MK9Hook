@@ -5,6 +5,8 @@
 #include "eSettingsManager.h"
 #include <Windows.h>
 #include "..\eDirectX9Hook.h"
+#include "helper/eMouse.h"
+#include "mkcamera.h"
 
 const char* szCharacters[] = {
 	"NPC_BaseMale",
@@ -132,6 +134,7 @@ const char* szStageNames[]{
 };
 const char* szCameraModes[TOTAL_CUSTOM_CAMERAS] = {
 	"Third Person",
+	"Head Perspective"
 };
 
 int GetCamMode(const char* mode)
@@ -151,6 +154,9 @@ int GetCamMode(const char* mode)
 MK9Menu* TheMenu = new MK9Menu();
 
 FVector& colorFilter = *(FVector*)0xDEBF8C;
+float& ms_fHudScaleX = *(float*)0xDE9078;
+float& ms_fHudScaleY = *(float*)0xDE907C;
+bool& ms_bPauseGame = *(bool*)0xE43054;
 
 static void ShowHelpMarker(const char* desc)
 {
@@ -198,32 +204,41 @@ void MK9Menu::Draw()
 				m_bSubmenuActive[SUBMENU_SCRIPT] = true;
 			ImGui::EndMenu();
 		}
+#ifdef _DEBUG
+		if (ImGui::BeginMenu("Debug"))
+		{
+			if (ImGui::MenuItem("Camera"))
+				m_bSubmenuActive[SUBMENU_CAMERA_DEBUG] = true;
+			ImGui::EndMenu();
+		}
+#endif // _DEBUG
+
 	}
 	ImGui::EndMenuBar();
 
 	if (ImGui::BeginTabBar("##tabs"))
 	{
-		if (ImGui::BeginTabItem("Character Modifier"))
+		if (ImGui::BeginTabItem("Character"))
 		{
 			DrawCharacterTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Stage Modifier"))
+		if (ImGui::BeginTabItem("Stage"))
 		{
 			DrawStageTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Player Control"))
+		if (ImGui::BeginTabItem("Player"))
 		{
 			DrawPlayerTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Speed Modifier"))
+		if (ImGui::BeginTabItem("Speed"))
 		{
 			DrawSpeedTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Camera Control"))
+		if (ImGui::BeginTabItem("Camera"))
 		{
 			DrawCameraTab();
 			ImGui::EndTabItem();
@@ -252,24 +267,43 @@ void MK9Menu::Draw()
 
 	if (m_bSubmenuActive[SUBMENU_SCRIPT])
 		DrawScriptReference();
+#ifdef _DEBUG
+	if (m_bSubmenuActive[SUBMENU_CAMERA_DEBUG])
+		DrawCamDebug();
+#endif // _DEBUG
+
 }
 
 void MK9Menu::UpdateControls()
 {
 	if (TheMenu->m_bFreeCam)
 	{
+		FVector fwd = TheCamera->GetMatrix().GetForward();
+		FVector strafe = TheCamera->GetMatrix().GetRight();
+		FVector up = TheCamera->GetMatrix().GetUp();
+
+		// forward
+
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyXPlus))
-			TheMenu->camPos.X += TheMenu->m_fFreeCameraSpeed;
+			TheMenu->camPos += fwd * TheMenu->m_fFreeCameraSpeed * 1;
+
+
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyXMinus))
-			TheMenu->camPos.X -= TheMenu->m_fFreeCameraSpeed;
+			TheMenu->camPos += fwd * TheMenu->m_fFreeCameraSpeed * -1;
+
+		// strafe
+
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyYPlus))
-			TheMenu->camPos.Y += TheMenu->m_fFreeCameraSpeed;
+			TheMenu->camPos += strafe * TheMenu->m_fFreeCameraSpeed * 1;
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyYMinus))
-			TheMenu->camPos.Y -= TheMenu->m_fFreeCameraSpeed;
+			TheMenu->camPos += strafe * TheMenu->m_fFreeCameraSpeed * -1;
+
+		// up
+
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyZPlus))
-			TheMenu->camPos.Z += TheMenu->m_fFreeCameraSpeed;
+			TheMenu->camPos += up * TheMenu->m_fFreeCameraSpeed * 1;
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyZMinus))
-			TheMenu->camPos.Z -= TheMenu->m_fFreeCameraSpeed;
+			TheMenu->camPos += up * TheMenu->m_fFreeCameraSpeed * -1;
 
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyYawMinus))
 			TheMenu->camRot.Yaw -= TheMenu->m_nFreeCameraRotationSpeed;
@@ -290,6 +324,15 @@ void MK9Menu::UpdateControls()
 			TheMenu->camFov -= 1.0f;
 		if (GetAsyncKeyState(SettingsMgr->iFreeCameraKeyFOVPlus))
 			TheMenu->camFov += 1.0f;
+
+		// mouse
+		{
+			if (!TheMenu->m_bIsActive && TheMenu->m_bMouseControl)
+			{
+				TheMenu->camRot.Pitch += eMouse::GetDeltaY();
+				TheMenu->camRot.Yaw += eMouse::GetDeltaX();
+			}
+		}
 	}
 
 	if (!m_bIsActive)
@@ -401,7 +444,9 @@ void MK9Menu::DrawPlayerTab()
 void MK9Menu::DrawSpeedTab()
 {
 	ImGui::Text("Gamespeed Control");
+	ImGui::PushItemWidth(-FLT_MIN);
 	ImGui::InputFloat("", &m_fSlowMotionSpeed, 0.1f);
+	ImGui::PopItemWidth();
 
 	if (m_fSlowMotionSpeed > 2.0f) m_fSlowMotionSpeed = 2.0f;
 	if (m_fSlowMotionSpeed < 0.0f) m_fSlowMotionSpeed = 0.0f;
@@ -413,7 +458,6 @@ void MK9Menu::DrawSpeedTab()
 			SetGameSpeed(1.0);
 	}
 	ImGui::SameLine(); ShowHelpMarker("Hotkey - F5.");
-
 }
 
 void MK9Menu::DrawCameraTab()
@@ -435,6 +479,7 @@ void MK9Menu::DrawCameraTab()
 
 		ImGui::InputFloat("Freecam Speed", &m_fFreeCameraSpeed);
 		ImGui::InputInt("Freecam Rotation Speed", &m_nFreeCameraRotationSpeed);
+		ImGui::Checkbox("Mouse Control", &m_bMouseControl);
 	}
 
 	if (GetObj(PLAYER1) && GetObj(PLAYER2))
@@ -455,6 +500,23 @@ void MK9Menu::DrawCameraTab()
 			ImGui::EndCombo();
 		}
 		m_nCurrentCustomCamera = GetCamMode(szCurrentCameraOption);
+
+		if (m_nCurrentCustomCamera == CAMERA_HEAD_TRACKING)
+		{
+			ImGui::InputFloat("Up/Down Angle Offset", &m_fAdjustCustomHeadCameraY);
+			ImGui::InputFloat("Up/Down Offset", &m_fAdjustCustomHeadCameraZ);
+			ImGui::InputFloat("Forward/Back Offset", &m_fAdjustCustomHeadCameraY2);
+			ImGui::InputFloat("Left/Right Offset", &m_fAdjustCustomHeadCameraX);
+
+			ImGui::Checkbox("Don't Flip Camera", &m_bDontFlipCamera);
+			ImGui::SameLine(); ShowHelpMarker("Use this option for head tracked cinematics.");
+			ImGui::Checkbox("Static Head", &m_bStaticHead);
+			ImGui::SameLine(); ShowHelpMarker("Restricts head movement.");
+			ImGui::Checkbox("Don't Readjust", &m_bDontAdjust);
+			ImGui::SameLine(); ShowHelpMarker("Some cinematics have the exact coordinates, but some despite that still look OK in FP. Ticking this won't adjust those that look don't broken.");
+
+			ImGui::TextWrapped("Recommended to set FOV value to at least 110 to make this mode look right!");
+		}
 	}
 	else
 		ImGui::Text("Custom cameras will appear once in-game!");
@@ -604,6 +666,8 @@ void MK9Menu::DrawScriptTab()
 void MK9Menu::DrawMiscTab()
 {
 	ImGui::Checkbox("Disable Combo Scaling", &m_bDisableComboScaling);
+	if (ImGui::Checkbox("Hide HUD", &m_bHideHUD))
+		ToggleHUD();
 	ImGui::Separator();
 	ImGui::Text("Color Filter");
 	ImGui::InputFloat3("R | G | B", &colorFilter.X);
@@ -625,13 +689,15 @@ void MK9Menu::DrawSettings()
 	static const char* settingNames[] = {
 		"Menu",
 		"INI",
-		"Keys"
+		"Keys",
+		"Mouse"
 	};
 
 	enum eSettings {
 		MENU,
 		INI,
 		KEYS,
+		MOUSE
 	};
 
 	ImGui::BeginChild("##settings", { 12 * ImGui::GetFontSize(), 0 }, true);
@@ -655,14 +721,16 @@ void MK9Menu::DrawSettings()
 	case MENU:
 		ImGui::TextWrapped("All user settings are saved to mk9hook_user.ini.");
 		ImGui::Text("Menu Scale");
+		ImGui::PushItemWidth(-FLT_MIN);
 		ImGui::InputFloat("", &SettingsMgr->fMenuScale);
+		ImGui::PopItemWidth();
 		break;
 	case INI:
 		ImGui::TextWrapped("These settings control MK9Hook.ini options. Any changes require game restart to take effect.");
 		ImGui::LabelText("", "Core");
 		ImGui::Separator();
 		ImGui::Checkbox("Debug Console", &SettingsMgr->bEnableConsoleWindow);
-
+		ImGui::Checkbox("Gamepad Support", &SettingsMgr->bEnableGamepadSupport);
 		ImGui::LabelText("", "Features");
 		ImGui::Separator();
 		ImGui::Checkbox("Use Generic VS Images", &SettingsMgr->bUseGenericVersusImage);
@@ -698,12 +766,12 @@ void MK9Menu::DrawSettings()
 		KeyBind(&SettingsMgr->iFreeCameraKeyRollPlus, "Roll+", "r_plus");
 		KeyBind(&SettingsMgr->iFreeCameraKeyRollMinus, "Roll-", "r_minus");
 
-		KeyBind(&SettingsMgr->iFreeCameraKeyXPlus, "X+", "x_plus");
-		KeyBind(&SettingsMgr->iFreeCameraKeyXMinus, "X-", "x_minus");
-		KeyBind(&SettingsMgr->iFreeCameraKeyYPlus, "Y+", "y_plus");
-		KeyBind(&SettingsMgr->iFreeCameraKeyYMinus, "Y-", "y_minus");
-		KeyBind(&SettingsMgr->iFreeCameraKeyZPlus, "Z+", "z_plus");
-		KeyBind(&SettingsMgr->iFreeCameraKeyZMinus, "Z-", "z_minus");
+		KeyBind(&SettingsMgr->iFreeCameraKeyXPlus, "Forward", "x_plus");
+		KeyBind(&SettingsMgr->iFreeCameraKeyXMinus, "Back", "x_minus");
+		KeyBind(&SettingsMgr->iFreeCameraKeyYPlus, "Left", "y_plus");
+		KeyBind(&SettingsMgr->iFreeCameraKeyYMinus, "Right", "y_minus");
+		KeyBind(&SettingsMgr->iFreeCameraKeyZPlus, "Up", "z_plus");
+		KeyBind(&SettingsMgr->iFreeCameraKeyZMinus, "Down", "z_minus");
 
 
 		ImGui::Separator();
@@ -719,6 +787,15 @@ void MK9Menu::DrawSettings()
 			}
 
 		}
+		break;
+	case MOUSE:
+		ImGui::TextWrapped("All user settings are saved to mk9hook_user.ini.");
+		ImGui::Text("Sensitivity");
+		ImGui::PushItemWidth(-FLT_MIN);
+		ImGui::SliderInt("", &SettingsMgr->mouse.sens,1, 50);
+		ImGui::PopItemWidth();
+		ImGui::Checkbox("Invert X", &SettingsMgr->mouse.invert_x);
+		ImGui::Checkbox("Invert Y", &SettingsMgr->mouse.invert_y);
 		break;
 	default:
 		break;
@@ -795,6 +872,25 @@ void MK9Menu::DrawScriptReference()
 	ImGui::End();
 }
 
+void MK9Menu::DrawCamDebug()
+{
+	ImGui::Begin("Cam. Debug", &m_bSubmenuActive[SUBMENU_CAMERA_DEBUG]);
+	if (TheCamera)
+	{
+		ImGui::Text("Camera Pointer %p", TheCamera);
+		ImGui::Separator();
+		ImGui::Text("Matrix");
+		FMatrix mat = TheCamera->GetMatrix();
+
+		ImGui::InputFloat4("Forward", &mat.M[0][0]);
+		ImGui::InputFloat4("Right", &mat.M[1][0]);
+		ImGui::InputFloat4("Up", &mat.M[2][0]);
+		ImGui::InputFloat4("4", &mat.M[3][0]);
+	}
+
+	ImGui::End();
+}
+
 void MK9Menu::DrawKeyBind(char* name, int* var)
 {
 	ImGui::SameLine();
@@ -852,6 +948,12 @@ void MK9Menu::ProcessScriptHotkeys()
 bool MK9Menu::GetActiveState()
 {
 	return m_bIsActive;
+}
+
+void ToggleHUD()
+{
+	ms_fHudScaleX *= -1;
+	ms_fHudScaleY *= -1;
 }
 
 char * GetMK9HookVersion()

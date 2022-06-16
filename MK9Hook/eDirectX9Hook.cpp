@@ -4,7 +4,6 @@
 #include "code/eSettingsManager.h"
 #include "code/eGamepadManager.h"
 #include "font.h"
-
 EndScene eDirectX9Hook::m_pEndScene;
 HWND eDirectX9Hook::ms_hWindow;
 WNDPROC eDirectX9Hook::ms_pWndProc;
@@ -179,8 +178,8 @@ long __stdcall eDirectX9Hook::EndScene(LPDIRECT3DDEVICE9 pDevice)
 		TheMenu->Draw();
 
 	ImGui::EndFrame();
-
 	ImGui::Render();
+
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
 	return m_pEndScene(pDevice);

@@ -4,6 +4,8 @@
 #include "mk9menu.h"
 #include "eNotifManager.h"
 #include "eSettingsManager.h"
+#include "unreal/FName.h"
+#include "mkcamera.h"
 
 int GetInfo(PLAYER_NUM plr)
 {
@@ -75,6 +77,12 @@ void GetCharacterPosition(PLAYER_NUM plr, FVector * pos)
 	int actor = *(int*)(obj + 8);
 	FVector location = *(FVector*)(actor + 0xDC);
 	*pos = location;
+}
+
+USkeletalMeshComponent* GetSkeleton(PLAYER_NUM plr)
+{
+	int obj = GetObj(plr);
+	return *(USkeletalMeshComponent**)(obj + 268);
 }
 
 void SetGameSpeed(float speed)
@@ -211,6 +219,17 @@ void MK9Hooks::HookProcessStuff()
 
 	if (TheMenu->m_bSlowMotion)
 		SetGameSpeed(TheMenu->m_fSlowMotionSpeed);
+
+	if (TheMenu->m_bForceCameraUpdate)
+	{
+		if (TheCamera)
+		{
+			TheCamera->HookedSetPosition(&TheMenu->camPos);
+			TheCamera->HookedSetRotation(&TheMenu->camRot);
+			//TheCamera->SetFOV(TheMenu->camFov);
+		}
+
+	}
 
 }
 

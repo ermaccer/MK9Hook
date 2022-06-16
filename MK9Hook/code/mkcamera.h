@@ -1,5 +1,6 @@
 #pragma once
 #include "mk9.h"
+#include "unreal/FMatrix.h"
 // generic layer for other plugins too
 class MKCamera {
 public:
@@ -10,4 +11,8 @@ public:
 	void HookedSetPosition(FVector* pos);
 	void HookedSetRotation(FRotator* rot);
 	void HookedSetFOV(float FOV, int unk);
+
+	FMatrix GetMatrix();
 };
+
+extern MKCamera* TheCamera;

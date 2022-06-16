@@ -80,6 +80,10 @@ void eSettingsManager::Init()
 
 	if (fMenuScale < 1.0f)
 		fMenuScale = 1.0f;
+
+	mouse.sens = user.ReadInteger("Mouse", "Sensitivity", 10);
+	mouse.invert_y = user.ReadBoolean("Mouse", "InvertY", false);
+	mouse.invert_x = user.ReadBoolean("Mouse", "InvertX", false);
 }
 
 void eSettingsManager::SaveSettings()
@@ -87,6 +91,7 @@ void eSettingsManager::SaveSettings()
 	CIniReader user("mk9hook_user.ini");
 	user.WriteFloat("MenuSettings", "fMenuScale", fMenuScale);
 	user.WriteInteger("Settings", "iHookMenuOpenKey", iHookMenuOpenKey);
+	user.WriteInteger("Settings", "iFreeCameraKeyXPlus", iFreeCameraKeyXPlus);
 	user.WriteInteger("Settings", "iFreeCameraKeyXMinus", iFreeCameraKeyXMinus);
 	user.WriteInteger("Settings", "iFreeCameraKeyYPlus", iFreeCameraKeyYPlus);
 	user.WriteInteger("Settings", "iFreeCameraKeyYMinus", iFreeCameraKeyYMinus);
@@ -100,6 +105,9 @@ void eSettingsManager::SaveSettings()
 	user.WriteInteger("Settings", "iFreeCameraKeyPitchMinus", iFreeCameraKeyPitchMinus);
 	user.WriteInteger("Settings", "iFreeCameraKeyFOVPlus", iFreeCameraKeyFOVPlus);
 	user.WriteInteger("Settings", "iFreeCameraKeyFOVMinus", iFreeCameraKeyFOVMinus);
+	user.WriteInteger("Mouse", "Sensitivity", mouse.sens);
+	user.WriteBoolean("Mouse", "InvertY", mouse.invert_y);
+	user.WriteBoolean("Mouse", "InvertX", mouse.invert_x);
 
 
 	CIniReader ini("");
