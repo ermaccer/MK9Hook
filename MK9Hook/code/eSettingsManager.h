@@ -21,6 +21,7 @@ public:
 	bool bUseGenericVersusImage;
 
 	int iHookMenuOpenKey;
+	int iToggleHUDKey;
 	
 	
 	// free camera keys

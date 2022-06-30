@@ -18,6 +18,10 @@ void eSettingsManager::Init()
 	if (iHookMenuOpenKey == 0xFF)
 		iHookMenuOpenKey = ini.ReadInteger("Settings", "iHookMenuOpenKey", VK_F1);
 
+
+	//iToggleHUDKey = user.ReadInteger("Settings", "iToggleHUDKey", 0xFF);
+
+
 	iFreeCameraKeyFOVPlus = user.ReadInteger("Settings", "iFreeCameraKeyFOVPlus", 0xFF);
 	if (iFreeCameraKeyFOVPlus == 0xFF)
 		iFreeCameraKeyFOVPlus = ini.ReadInteger("Settings", "iFreeCameraKeyFOVPlus", 0);
@@ -90,6 +94,7 @@ void eSettingsManager::SaveSettings()
 {
 	CIniReader user("mk9hook_user.ini");
 	user.WriteFloat("MenuSettings", "fMenuScale", fMenuScale);
+
 	user.WriteInteger("Settings", "iHookMenuOpenKey", iHookMenuOpenKey);
 	user.WriteInteger("Settings", "iFreeCameraKeyXPlus", iFreeCameraKeyXPlus);
 	user.WriteInteger("Settings", "iFreeCameraKeyXMinus", iFreeCameraKeyXMinus);
@@ -108,6 +113,7 @@ void eSettingsManager::SaveSettings()
 	user.WriteInteger("Mouse", "Sensitivity", mouse.sens);
 	user.WriteBoolean("Mouse", "InvertY", mouse.invert_y);
 	user.WriteBoolean("Mouse", "InvertX", mouse.invert_x);
+	//user.WriteInteger("Settings", "iToggleHUDKey", iToggleHUDKey);
 
 
 	CIniReader ini("");
@@ -133,4 +139,5 @@ void eSettingsManager::ResetKeys()
 	iFreeCameraKeyRollPlus = 105;
 	iFreeCameraKeyFOVPlus = 107;
 	iFreeCameraKeyFOVMinus = 109;
+	//iToggleHUDKey = VK_F2;
 }

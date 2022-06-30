@@ -93,6 +93,7 @@ void eDirectX9Hook::InitImGui(LPDIRECT3DDEVICE9 pDevice)
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui::GetIO().ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	ImGui_ImplWin32_Init(ms_hWindow);
 	ImGui_ImplDX9_Init(pDevice);
 	if (SettingsMgr->bEnableGamepadSupport)
@@ -213,6 +214,9 @@ LRESULT __stdcall eDirectX9Hook::WndProc(const HWND hWnd, UINT uMsg, WPARAM wPar
 				SetGameSpeed(TheMenu->m_fSlowMotionSpeed);
 			else
 				SetGameSpeed(1.0);
+			break;
+		case VK_F2:
+			ToggleHUD();
 			break;
 		default:
 			break;
