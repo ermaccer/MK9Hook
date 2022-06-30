@@ -218,22 +218,22 @@ void MK9Menu::Draw()
 
 	if (ImGui::BeginTabBar("##tabs"))
 	{
-		if (ImGui::BeginTabItem("Character"))
+		if (ImGui::BeginTabItem("Character Modifier"))
 		{
 			DrawCharacterTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Stage"))
+		if (ImGui::BeginTabItem("Stage Modifier"))
 		{
 			DrawStageTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Player"))
+		if (ImGui::BeginTabItem("Player Control"))
 		{
 			DrawPlayerTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Speed"))
+		if (ImGui::BeginTabItem("Speed Modifier"))
 		{
 			DrawSpeedTab();
 			ImGui::EndTabItem();
@@ -243,7 +243,7 @@ void MK9Menu::Draw()
 			DrawCameraTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Cheats"))
+		if (ImGui::BeginTabItem("Camera Control"))
 		{
 			DrawCheatsTab();
 			ImGui::EndTabItem();
