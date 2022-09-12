@@ -40,4 +40,10 @@ void USkeletalMeshComponent::GetBoneRotation(FRotator* rot, const char* name)
 	GetBoneMatrix(&mat, boneID, 1);
 	mat.Rotator(rot);
 }
+void USkeletalMeshComponent::Dismember(int partID)
+{
+	((void(__thiscall*)(USkeletalMeshComponent*))0x77BD70)(this);
+	((void(__thiscall*)(USkeletalMeshComponent*, int))0x766920)(this, partID);
+
+}
 //((FMatrix*(__thiscall*)(FMatrix*, FQuat*, FVector*))0x5ED0E0)(&tmp, &qrot, &origin);

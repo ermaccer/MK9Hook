@@ -105,7 +105,7 @@ void eDirectX9Hook::ReloadImGuiFont()
 {
 	if (!(SettingsMgr->fMenuScale < 1.0f))
 	{
-		float fontSize = 13.0f;
+		float fontSize = 16.0f;
 		ImGuiStyle * style = &ImGui::GetStyle();
 		ImGuiIO io = ImGui::GetIO();
 		io.Fonts->Clear();

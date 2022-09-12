@@ -54,6 +54,23 @@ void SetCharacterSpeed(PLAYER_NUM plr, float speed)
 	*(float*)(obj + 0xF4) = speed;
 }
 
+void SetCharacterAI(PLAYER_NUM plr, const char* script)
+{
+	int info = GetInfo(plr);
+	int drone = ((int(__thiscall*)(int))0x44D480)(info);
+	if (drone)
+		((void(__cdecl*)(int, const char*))0x891A80)(drone, script);
+}
+
+void DismemberCharacter(PLAYER_NUM plr, int partID)
+{
+	int obj = GetObj(plr);
+	USkeletalMeshComponent* skeleton = GetSkeleton(plr);
+	if (skeleton)
+		skeleton->Dismember(partID);
+	
+}
+
 void SetCharacterDamageScale(PLAYER_NUM plr, float value)
 {
 	int info = GetInfo(plr);
@@ -195,6 +212,7 @@ void MK9Hooks::HookProcessStuff()
 			SetCharacterLife(PLAYER2, 0.0f);
 	}
 
+
 	if (TheMenu->m_bChangePlayerScale)
 	{
 		if (GetObj(PLAYER1))
@@ -258,6 +276,10 @@ void MK9Hooks::SetupFight()
 	if (TheMenu->m_bPlayer2Modifier)
 		SetCharacter(PLAYER2, 0, TheMenu->szPlayer2ModifierCharacter);
 
+	if (TheMenu->m_bPlayer1BackupModifier)
+		SetCharacter(PLAYER1, 1, TheMenu->szPlayer1ModifierBackupCharacter);
+	if (TheMenu->m_bPlayer2BackupModifier)
+		SetCharacter(PLAYER2, 1, TheMenu->szPlayer2ModifierBackupCharacter);
 
 
 	printf("MK9Hook::Info() | %s VS %s\n", GetCharacterName(PLAYER1), GetCharacterName(PLAYER2));

@@ -137,6 +137,32 @@ const char* szCameraModes[TOTAL_CUSTOM_CAMERAS] = {
 	"Head Perspective"
 };
 
+
+const char* szAI[] = {
+	"AI_Dummy.mko",
+	"AI_Normal.mko",
+	"AI_ZombieWalk.mko",
+	"AI_ZombieAttack.mko",
+	"AI_Tower_Thrower.mko",
+	"AI_ShangtsungBoss.mko",
+	"AI_Passive.mko",
+	"AI_Panic.mko",
+	"AI_OneHitter.mko",
+	"AI_NightWolfLightningFreak.mko",
+	"AI_KeepAway.mko",
+	"AI_KahnBoss.mko",
+	"AI_JumpKeepAway.mko",
+	"AI_Jumper.mko",
+	"AI_JadeMK2.mko",
+	"AI_HiLo.mko",
+	"AI_GoroBoss.mko",
+	"AI_DummyConfig.mko",
+	"AI_Ducker.mko",
+	"AI_DofDistance.mko",
+	"AI_Config.mko",
+	"AI_Berserker.mko",
+};
+
 int GetCamMode(const char* mode)
 {
 	for (int i = 0; i < TOTAL_CUSTOM_CAMERAS; i++)
@@ -176,9 +202,12 @@ void MK9Menu::Initialize()
 {
 	sprintf(szPlayer1ModifierCharacter, szCharacters[0]);
 	sprintf(szPlayer2ModifierCharacter, szCharacters[0]);
+	sprintf(szPlayer1ModifierBackupCharacter, szCharacters[0]);
+	sprintf(szPlayer2ModifierBackupCharacter, szCharacters[0]);
 	sprintf(szStageModifierStage, szStageNames[0]);
 	sprintf(szCurrentCameraOption, szCameraModes[0]);
-
+	sprintf(szPlayer1AI, szAI[0]);
+	sprintf(szPlayer2AI, szAI[0]);
 }
 
 void MK9Menu::Process()
@@ -218,22 +247,22 @@ void MK9Menu::Draw()
 
 	if (ImGui::BeginTabBar("##tabs"))
 	{
-		if (ImGui::BeginTabItem("Character Modifier"))
+		if (ImGui::BeginTabItem("Character"))
 		{
 			DrawCharacterTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Stage Modifier"))
+		if (ImGui::BeginTabItem("Stage"))
 		{
 			DrawStageTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Player Control"))
+		if (ImGui::BeginTabItem("Player"))
 		{
 			DrawPlayerTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Speed Modifier"))
+		if (ImGui::BeginTabItem("Speed"))
 		{
 			DrawSpeedTab();
 			ImGui::EndTabItem();
@@ -243,7 +272,7 @@ void MK9Menu::Draw()
 			DrawCameraTab();
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Camera Control"))
+		if (ImGui::BeginTabItem("Cheats"))
 		{
 			DrawCheatsTab();
 			ImGui::EndTabItem();
@@ -253,6 +282,13 @@ void MK9Menu::Draw()
 			DrawScriptTab();
 			ImGui::EndTabItem();
 		}
+#ifdef TEST
+		if (ImGui::BeginTabItem("AI"))
+		{
+			DrawAITab();
+			ImGui::EndTabItem();
+		}
+#endif
 		if (ImGui::BeginTabItem("Misc."))
 		{
 			DrawMiscTab();
@@ -371,7 +407,38 @@ void MK9Menu::DrawCharacterTab()
 		}
 		ImGui::EndCombo();
 	}
+	ImGui::Separator();
+	ImGui::Checkbox("Enable Player 1 Tag Modifier", &m_bPlayer1BackupModifier);
 
+	if (ImGui::BeginCombo("Player 1 Tag Character", szPlayer1ModifierBackupCharacter))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(szCharacters); n++)
+		{
+			bool is_selected = (szPlayer1ModifierBackupCharacter == szCharacters[n]);
+			if (ImGui::Selectable(szCharacters[n], is_selected))
+				sprintf(szPlayer1ModifierBackupCharacter, szCharacters[n]);
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::Separator();
+	ImGui::Checkbox("Enable Player 2 Tag Modifier", &m_bPlayer2BackupModifier);
+
+	if (ImGui::BeginCombo("Player 2 Tag Character", szPlayer2ModifierBackupCharacter))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(szCharacters); n++)
+		{
+			bool is_selected = (szPlayer2ModifierBackupCharacter == szCharacters[n]);
+			if (ImGui::Selectable(szCharacters[n], is_selected))
+				sprintf(szPlayer2ModifierBackupCharacter, szCharacters[n]);
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+		}
+		ImGui::EndCombo();
+	}
 }
 
 void MK9Menu::DrawStageTab()
@@ -671,12 +738,59 @@ void MK9Menu::DrawMiscTab()
 	ImGui::Separator();
 	ImGui::Text("Color Filter");
 	ImGui::InputFloat3("R | G | B", &colorFilter.X);
+
 #ifdef _DEBUG
 	if (ImGui::Button("Print Pointers"))
 	{
 		printf("P1 OBJ: 0x%X INFO: 0x%X\n", GetObj(PLAYER1), GetInfo(PLAYER1));
 	}
 #endif
+}
+
+void MK9Menu::DrawAITab()
+{
+	ImGui::Checkbox("Change Player 1 AI", &m_bAIDroneModifierP1);
+
+	if (ImGui::BeginCombo("Player 1 AI", szPlayer1AI))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(szAI); n++)
+		{
+			bool is_selected = (szPlayer1AI == szAI[n]);
+			if (ImGui::Selectable(szAI[n], is_selected))
+				sprintf(szPlayer1AI, szAI[n]);
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::Separator();
+	ImGui::Checkbox("Change Player 2 AI", &m_bAIDroneModifierP2);
+
+	if (ImGui::BeginCombo("Player 2 AI", szPlayer2AI))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(szAI); n++)
+		{
+			bool is_selected = (szPlayer2AI == szAI[n]);
+			if (ImGui::Selectable(szAI[n], is_selected))
+				sprintf(szPlayer2AI, szAI[n]);
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::Button("Update"))
+	{
+		if (TheMenu->m_bAIDroneModifierP1)
+			SetCharacterAI(PLAYER1, TheMenu->szPlayer1AI);
+		if (TheMenu->m_bAIDroneModifierP2)
+			SetCharacterAI(PLAYER2, TheMenu->szPlayer2AI);
+	}
+
+	ImGui::Separator();
 }
 
 void MK9Menu::DrawSettings()

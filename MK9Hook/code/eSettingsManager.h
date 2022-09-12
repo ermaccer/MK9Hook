@@ -21,6 +21,7 @@ public:
 	bool bUseGenericVersusImage;
 
 	int iHookMenuOpenKey;
+	int iToggleSlowMoKey;
 	int iToggleHUDKey;
 	
 	

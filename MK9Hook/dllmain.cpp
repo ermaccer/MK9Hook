@@ -122,7 +122,6 @@ void OnInitializeHook()
 	InjectHook(0x8DB8D1, &MKCamera::HookedSetFOV, PATCH_CALL);
 	InjectHook(0x978303, &MKCamera::HookedSetFOV, PATCH_CALL);
 
-
 	//gamepad
 	if (SettingsMgr->bEnableGamepadSupport)
 		InjectHook(0x99CA36, XInputGetState_Hook, PATCH_JUMP);

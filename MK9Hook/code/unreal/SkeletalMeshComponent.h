@@ -13,4 +13,6 @@ public:
 
 
 	void GetBoneRotation(FRotator* rot, const char* name);
+
+	void Dismember(int partID);
 };

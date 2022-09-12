@@ -6,7 +6,7 @@
 
 #define GFG_GAME_INFO  0xE89B70 
 
-#define MK9HOOK_VERSION "0.3.2"
+#define MK9HOOK_VERSION "0.3.3"
 
 enum  PLAYER_NUM
 {
@@ -31,6 +31,8 @@ void  SetCharacterLife(PLAYER_NUM plr, float health);
 
 void  SetCharacterScale(PLAYER_NUM plr, FVector* scale);
 void  SetCharacterSpeed(PLAYER_NUM plr, float speed);
+void  SetCharacterAI(PLAYER_NUM plr, const char* script);
+void  DismemberCharacter(PLAYER_NUM plr, int partID);
 
 void  SetCharacterDamageScale(PLAYER_NUM plr, float value);
 

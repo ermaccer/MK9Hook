@@ -53,18 +53,22 @@ public:
 	bool	 m_bHideHUD = false;
 	bool     m_bForceCameraUpdate = false;
 	// cheats
-	bool m_bInfiniteHealthP1 = false;
-	bool m_bInfiniteMeterP1 = false;
-	bool m_bInfiniteHealthP2 = false;
-	bool m_bInfiniteMeterP2 = false;
-	bool m_bNoHealthP1 = false;
-	bool m_bNoHealthP2 = false;
-	bool m_bZeroMeterP1 = false;
-	bool m_bZeroMeterP2 = false;
-	bool m_bChangePlayerSpeed = false;
-	bool m_bChangePlayerScale = false;
-	bool m_bPlayer1Modifier = false;
-	bool m_bPlayer2Modifier = false;
+	bool	m_bInfiniteHealthP1 = false;
+	bool	m_bInfiniteMeterP1 = false;
+	bool	m_bInfiniteHealthP2 = false;
+	bool	m_bInfiniteMeterP2 = false;
+	bool	m_bNoHealthP1 = false;
+	bool	m_bNoHealthP2 = false;
+	bool	m_bZeroMeterP1 = false;
+	bool	m_bZeroMeterP2 = false;
+	bool	m_bChangePlayerSpeed = false;
+	bool	m_bChangePlayerScale = false;
+	bool	m_bPlayer1Modifier = false;
+	bool	m_bPlayer2Modifier = false;
+	bool	m_bPlayer1BackupModifier = false;
+	bool	m_bPlayer2BackupModifier = false;
+	bool	m_bAIDroneModifierP1 = false;
+	bool	m_bAIDroneModifierP2 = false;
 
 	bool    m_bDisableComboScaling = false;
 
@@ -90,8 +94,12 @@ public:
 
 	char szPlayer1ModifierCharacter[128] = {};
 	char szPlayer2ModifierCharacter[128] = {};
+	char szPlayer1ModifierBackupCharacter[128] = {};
+	char szPlayer2ModifierBackupCharacter[128] = {};
 	char szStageModifierStage[128] = {};
 	char szCurrentCameraOption[128] = {};
+	char szPlayer1AI[128] = {};
+	char szPlayer2AI[128] = {};
 
 	FVector	 m_vP1Scale = { 1.0f, 1.0f, 1.0f };
 	FVector	 m_vP2Scale = { 1.0f, 1.0f, 1.0f };
@@ -118,6 +126,7 @@ public:
 	void DrawCheatsTab();
 	void DrawScriptTab();
 	void DrawMiscTab();
+	void DrawAITab();
 
 	void DrawSettings();
 	void DrawScriptReference();

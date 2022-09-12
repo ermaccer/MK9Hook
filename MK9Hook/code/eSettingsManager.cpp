@@ -19,7 +19,11 @@ void eSettingsManager::Init()
 		iHookMenuOpenKey = ini.ReadInteger("Settings", "iHookMenuOpenKey", VK_F1);
 
 
-	//iToggleHUDKey = user.ReadInteger("Settings", "iToggleHUDKey", 0xFF);
+	iToggleSlowMoKey = user.ReadInteger("Settings", "iToggleSlowMoKey", 0xFF);
+	if (iToggleSlowMoKey == 0xFF)
+		iToggleSlowMoKey = VK_F5;
+
+	iToggleHUDKey = user.ReadInteger("Settings", "iToggleHUDKey", 0xFF);
 
 
 	iFreeCameraKeyFOVPlus = user.ReadInteger("Settings", "iFreeCameraKeyFOVPlus", 0xFF);
