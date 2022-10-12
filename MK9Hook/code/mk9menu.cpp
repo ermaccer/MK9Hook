@@ -581,7 +581,7 @@ void MK9Menu::DrawCameraTab()
 			ImGui::Checkbox("Static Head", &m_bStaticHead);
 			ImGui::SameLine(); ShowHelpMarker("Restricts head movement.");
 			ImGui::Checkbox("Don't Readjust", &m_bDontAdjust);
-			ImGui::SameLine(); ShowHelpMarker("Some cinematics have the exact coordinates, but some despite that still look OK in FP. Ticking this won't adjust those that look don't broken.");
+			ImGui::SameLine(); ShowHelpMarker("Some cinematics have the exact coordinates, but some despite that still look OK in FP. Ticking this won't adjust those that don't look broken.");
 
 			ImGui::TextWrapped("Recommended to set FOV value to at least 110 to make this mode look right!");
 		}
