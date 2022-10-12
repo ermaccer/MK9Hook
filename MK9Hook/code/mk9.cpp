@@ -13,9 +13,19 @@ int GetInfo(PLAYER_NUM plr)
 	return ((int(__thiscall*)(int, PLAYER_NUM))0x80E540)(gameinfo, plr);
 }
 
+int GetBackupInfo(PLAYER_NUM plr)
+{
+	return GetInfo(plr) + 236;
+}
+
 int GetObj(PLAYER_NUM plr)
 {
 	return ((int(__thiscall*)(int, int))0x895B70)(GetInfo(plr), 0);
+}
+
+int GetBackupObj(PLAYER_NUM plr)
+{
+	return ((int(__thiscall*)(int, int))0x895B70)(GetBackupInfo(plr), 0);
 }
 
 void SetCharacter(PLAYER_NUM plr, int unk, char * name)
@@ -39,6 +49,18 @@ void SetCharacterLife(PLAYER_NUM plr, float health)
 	int obj = GetObj(plr);
 	*(float*)(obj + 0x78C0) = health;
 
+}
+
+void SetBackupCharacterMeter(PLAYER_NUM plr, float meter)
+{
+	int info = GetBackupInfo(plr);
+	*(float*)(info + 0xC14) = meter;
+}
+
+void SetBackupCharacterLife(PLAYER_NUM plr, float health)
+{
+	int obj = GetBackupObj(plr);
+	*(float*)(obj + 0x78C0) = health;
 }
 
 void SetCharacterScale(PLAYER_NUM plr, FVector * scale)
@@ -185,11 +207,24 @@ void MK9Hooks::HookProcessStuff()
 		SetCharacterMeter(PLAYER2, 1.0f);
 
 
+	if (TheMenu->m_bInfiniteMeterBP1)
+		SetBackupCharacterMeter(PLAYER1, 1.0f);
+
+	if (TheMenu->m_bInfiniteMeterBP2)
+		SetBackupCharacterMeter(PLAYER2, 1.0f);
+
 	if (TheMenu->m_bZeroMeterP1)
 		SetCharacterMeter(PLAYER1, 0.0f);
 
 	if (TheMenu->m_bZeroMeterP2)
 		SetCharacterMeter(PLAYER2, 0.0f);
+
+
+	if (TheMenu->m_bZeroMeterBP1)
+		SetBackupCharacterMeter(PLAYER1, 0.0f);
+
+	if (TheMenu->m_bZeroMeterBP2)
+		SetBackupCharacterMeter(PLAYER2, 0.0f);
 
 	if (TheMenu->m_bInfiniteHealthP1)
 	{
@@ -201,6 +236,7 @@ void MK9Hooks::HookProcessStuff()
 		if (GetObj(PLAYER2))
 			SetCharacterLife(PLAYER2, 1.0f);
 	}
+
 	if (TheMenu->m_bNoHealthP1)
 	{
 		if (GetObj(PLAYER1))
@@ -210,6 +246,28 @@ void MK9Hooks::HookProcessStuff()
 	{
 		if (GetObj(PLAYER2))
 			SetCharacterLife(PLAYER2, 0.0f);
+	}
+
+
+	if (TheMenu->m_bInfiniteHealthBP1)
+	{
+		if (GetBackupObj(PLAYER1))
+			SetBackupCharacterLife(PLAYER1, 1.0f);
+	}
+	if (TheMenu->m_bInfiniteHealthBP2)
+	{
+		if (GetBackupObj(PLAYER2))
+			SetBackupCharacterLife(PLAYER2, 1.0f);
+	}
+	if (TheMenu->m_bNoHealthBP1)
+	{
+		if (GetBackupObj(PLAYER1))
+			SetBackupCharacterLife(PLAYER1, 0.0f);
+	}
+	if (TheMenu->m_bNoHealthBP2)
+	{
+		if (GetBackupObj(PLAYER2))
+			SetBackupCharacterLife(PLAYER2, 0.0f);
 	}
 
 
@@ -280,7 +338,6 @@ void MK9Hooks::SetupFight()
 		SetCharacter(PLAYER1, 1, TheMenu->szPlayer1ModifierBackupCharacter);
 	if (TheMenu->m_bPlayer2BackupModifier)
 		SetCharacter(PLAYER2, 1, TheMenu->szPlayer2ModifierBackupCharacter);
-
 
 	printf("MK9Hook::Info() | %s VS %s\n", GetCharacterName(PLAYER1), GetCharacterName(PLAYER2));
 }

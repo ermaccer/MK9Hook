@@ -154,7 +154,7 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 			OnInitializeHook();
 			DisableThreadLibraryCalls(hMod);
 			CreateThread(nullptr, 0, DirectXHookThread, hMod, 0, nullptr);
-			CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)HookUpdate, hMod, 0, nullptr);
+			CreateThread(nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(HookUpdate), nullptr, 0, nullptr);
 		}
 		break;
 	case DLL_PROCESS_DETACH:

@@ -61,6 +61,16 @@ public:
 	bool	m_bNoHealthP2 = false;
 	bool	m_bZeroMeterP1 = false;
 	bool	m_bZeroMeterP2 = false;
+
+	bool	m_bInfiniteHealthBP1 = false;
+	bool	m_bInfiniteMeterBP1 = false;
+	bool	m_bInfiniteHealthBP2 = false;
+	bool	m_bInfiniteMeterBP2 = false;
+	bool	m_bNoHealthBP1 = false;
+	bool	m_bNoHealthBP2 = false;
+	bool	m_bZeroMeterBP1 = false;
+	bool	m_bZeroMeterBP2 = false;
+
 	bool	m_bChangePlayerSpeed = false;
 	bool	m_bChangePlayerScale = false;
 	bool	m_bPlayer1Modifier = false;

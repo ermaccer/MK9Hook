@@ -96,7 +96,8 @@ const char* szCharacters[] = {
 	"CHAR_Stryker_B",
 	"CHAR_SubZero",
 	"CHAR_SubZero_B",
-	"CHAR_SubZero_C"
+	"CHAR_SubZero_C",
+	"CHAR_SubZero_F"
 };
 
 const char* szStageNames[]{

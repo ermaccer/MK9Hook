@@ -21,13 +21,18 @@ enum  PLAYER_NUM
 
 
 int	  GetInfo(PLAYER_NUM plr);
+int	  GetBackupInfo(PLAYER_NUM plr);
 int	  GetObj(PLAYER_NUM plr);
+int	  GetBackupObj(PLAYER_NUM plr);
 
 void  SetCharacter(PLAYER_NUM plr, int unk, char* name);
 void  SetStage(const char* stage);
 
 void  SetCharacterMeter(PLAYER_NUM plr, float meter);
 void  SetCharacterLife(PLAYER_NUM plr, float health);
+
+void  SetBackupCharacterMeter(PLAYER_NUM plr, float meter);
+void  SetBackupCharacterLife(PLAYER_NUM plr, float health);
 
 void  SetCharacterScale(PLAYER_NUM plr, FVector* scale);
 void  SetCharacterSpeed(PLAYER_NUM plr, float speed);
